@@ -92,6 +92,8 @@ contract MasterChef is Ownable {
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event ProfitLock(address indexed user, uint256 indexed pid, uint256 pt, uint256 times);
     event ExtractReward(address indexed user, uint256 indexed pid, uint256 amount);
+    event PlayerBookEvent(address indexed user, address indexed fromUser, uint256 amount);
+
 
     constructor(
         HBTToken _hbt, //HBT Token合约地址
@@ -274,6 +276,7 @@ contract MasterChef is Ownable {
             // safeHbtTransfer(msg.sender, pending.sub(toRefer));
             userRewardInfo[_pid][msg.sender] = userRewardInfo[_pid][msg.sender].add(pending.sub(toRefer));
             safeHbtTransfer(refer, toRefer);
+            emit PlayerBookEvent(refer, msg.sender, toRefer);
         }
         pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
         user.amount = user.amount.add(_amount);
@@ -300,7 +303,8 @@ contract MasterChef is Ownable {
         // safeHbtTransfer(msg.sender, pending.sub(toRefer));
         userRewardInfo[_pid][msg.sender] = userRewardInfo[_pid][msg.sender].add(pending.sub(toRefer));
         safeHbtTransfer(refer, toRefer);
-
+        emit PlayerBookEvent(refer, msg.sender, toRefer);
+        
         user.amount = user.amount.sub(_amount);
         user.rewardDebt = user.amount.mul(pool.accHbtPerShare).div(1e12);
         if(_amount > 0){
@@ -323,13 +327,13 @@ contract MasterChef is Ownable {
 
     // Safe hbt transfer function, just in case if rounding error causes pool to not have enough HBTs.
     function safeHbtTransfer(address _to, uint256 _amount) internal {
-        // uint256 hbtBal = hbt.balanceOf(address(this));
-        // if (_amount > hbtBal) {
-        //     hbt.transfer(_to, hbtBal);
-        // } else {
-        //     hbt.transfer(_to, _amount);
-        // }
-        hbt.transfer(_to, _amount);
+        uint256 hbtBal = hbt.balanceOf(address(this));
+        if (_amount > hbtBal) {
+            hbt.transfer(_to, hbtBal);
+        } else {
+            hbt.transfer(_to, _amount);
+        }
+        // hbt.transfer(_to, _amount);
     }
 
  
@@ -348,10 +352,9 @@ contract MasterChef is Ownable {
         } else {
             uint256 _pendingTimes = pending.mul(_times).div(10);
             hbt.allowMint(address(this), _pendingTimes.sub(pending));
-            uint256 hbtBal = hbt.balanceOf(address(this));
 
             safeHbtTransfer(address(hbtLock), _pendingTimes);
-            hbtLock.disposit(msg.sender,pending,_times,_pendingTimes,hbtBal);
+            hbtLock.disposit(msg.sender,pending,_times);
             emit ProfitLock(msg.sender, _pid, pending, _times);
         }
 

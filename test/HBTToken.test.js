@@ -1,7 +1,7 @@
-const { expectRevert } = require('@openzeppelin/test-helpers');
+const { expectRevert,BN } = require('@openzeppelin/test-helpers');
 const HBTToken = artifacts.require('HBTToken');
 
-contract('HBTToken', ([alice, bob, carol]) => {
+contract('HBTToken', ([alice, bob, carol,dev]) => {
     beforeEach(async () => {
         this.hbt = await HBTToken.new({ from: alice });
     });
@@ -59,5 +59,26 @@ contract('HBTToken', ([alice, bob, carol]) => {
             this.hbt.transfer(carol, '1', { from: bob }),
             'ERC20: transfer amount exceeds balance',
         );
+    });
+
+    it('按照业务比例进行分配', async () => {
+        let flow = new BN("300000000000000000000000000");
+        let loan = new BN("300000000000000000000000000");
+        let insurance = new BN("200000000000000000000000000");
+        let team = new BN("200000000000000000000000000");
+
+        await this.hbt.mint(alice, flow, { from: alice });
+        await this.hbt.mint(bob, loan, { from: alice });
+        await this.hbt.mint(carol, insurance, { from: alice });
+        await this.hbt.mint(dev, team, { from: alice });
+    });
+
+    it('销毁代币', async () => {
+        let flow = new BN("1000");
+        await this.hbt.mint(alice, flow, { from: alice });
+        assert.equal((await this.hbt.balanceOf(alice)).valueOf(), '1000');
+
+        await this.hbt.burn(flow, { from: alice });
+        assert.equal((await this.hbt.balanceOf(alice)).valueOf(), '0');
     });
   });

@@ -69,6 +69,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "close",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "depositCountTotal",
 				"outputs": [
 					{
@@ -109,16 +122,6 @@
 						"internalType": "uint256",
 						"name": "times",
 						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "numberTimes",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "hbtBal",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -152,16 +155,6 @@
 					{
 						"internalType": "uint256",
 						"name": "_times",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_numberTimes",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_hbtBal",
 						"type": "uint256"
 					}
 				],
@@ -275,6 +268,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "bool",
+						"name": "_bool",
+						"type": "bool"
+					}
+				],
+				"name": "setClose",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "_address",
 						"type": "address"
@@ -333,30 +339,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_address",
-						"type": "address"
-					}
-				],
-				"name": "unlockInfoOpt",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -444,10 +426,10 @@
 	},
 	"sources": {
 		"localhost/MasterChef.sol": {
-			"keccak256": "0x7c184a27699e38c621ada34485828d5d27c2a743f20735e285d7b926cb315e71",
+			"keccak256": "0x46a734316cc6777945ee6af9cef50c0e66b0f74c8699471a5423629b2e0db1d7",
 			"urls": [
-				"bzz-raw://bfd2640777852eecab22fabccb265db930a612eab77553bb359ea870d38ef22d",
-				"dweb:/ipfs/QmYmvQ2ZBYkPyPGKQ6Bc7X3K3nnqeidumeYSv6BzjpMHMo"
+				"bzz-raw://86628be98b3e8f98ea81198749d2a4378e4362945509215e147d4f920a747288",
+				"dweb:/ipfs/QmStZiMhAW94btK4chtXkYSdQNQeriZfTgN92qWQNASfT8"
 			]
 		}
 	},

@@ -13,22 +13,22 @@ contract('MasterChef', ([alice, bob, carol, dev, minter]) => {
 
     });
 
-    // it('设置正确的状态变量', async () => {
-    //     this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '1000', '0', '1000',this.playerBook.address, { from: alice });
-    //     // await this.hbt.transferOwnership(this.chef.address, { from: alice }); //这个地方和sushi不一样，hbttoken的owner权限没有给masterchef，而是需要加入hbttoken白名单
-    //     const hbt = await this.chef.hbt();
-    //     // const devaddr = await this.chef.devaddr();
-    //     // const owner = await this.hbt.owner();
+    it('设置正确的状态变量', async () => {
+        this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '1000', '0', '1000',this.playerBook.address, { from: alice });
+        // await this.hbt.transferOwnership(this.chef.address, { from: alice }); //这个地方和sushi不一样，hbttoken的owner权限没有给masterchef，而是需要加入hbttoken白名单
+        const hbt = await this.chef.hbt();
+        // const devaddr = await this.chef.devaddr();
+        // const owner = await this.hbt.owner();
 
-    //     assert.equal(hbt.valueOf(), this.hbt.address);
-    //     // assert.equal(devaddr.valueOf(), dev);
-    //     // assert.equal(owner.valueOf(), this.chef.address);
+        assert.equal(hbt.valueOf(), this.hbt.address);
+        // assert.equal(devaddr.valueOf(), dev);
+        // assert.equal(owner.valueOf(), this.chef.address);
 
-    //     //添加htbToken白名单
-    //     this.hbt.setAllowMintAddr(this.chef.address,true);
-    //     const isAllowAddress = await this.hbt.allowMintAddr(this.chef.address);
-    //     assert.equal(isAllowAddress.valueOf(),true);
-    // });
+        //添加htbToken白名单
+        this.hbt.setAllowMintAddr(this.chef.address,true);
+        const isAllowAddress = await this.hbt.allowMintAddr(this.chef.address);
+        assert.equal(isAllowAddress.valueOf(),true);
+    });
 
     context('将ERC/LP令牌添加到字段中', () => {
         beforeEach(async () => {
@@ -42,110 +42,110 @@ contract('MasterChef', ([alice, bob, carol, dev, minter]) => {
             await this.lp2.transfer(carol, '1000', { from: minter });
         });
 
-        // it('紧急赎回LP/ERC20', async () => {
-        //     // 100 per block farming rate starting at block 100 with bonus until block 1000
-        //     this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '100', '1000',this.playerBook.address, { from: alice });
+        it('紧急赎回LP/ERC20', async () => {
+            // 100 per block farming rate starting at block 100 with bonus until block 1000
+            this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '100', '1000',this.playerBook.address, { from: alice });
 
-        //     await this.chef.add('100', this.lp.address, true);
-        //     await this.lp.approve(this.chef.address, '1000', { from: bob });
-        //     await this.chef.deposit(0, '100', { from: bob });
-        //     assert.equal((await this.lp.balanceOf(bob)).valueOf(), '900');
-        //     await this.chef.emergencyWithdraw(0, { from: bob });
-        //     assert.equal((await this.lp.balanceOf(bob)).valueOf(), '1000');
-        // });
+            await this.chef.add('100', this.lp.address, true);
+            await this.lp.approve(this.chef.address, '1000', { from: bob });
+            await this.chef.deposit(0, '100', { from: bob });
+            assert.equal((await this.lp.balanceOf(bob)).valueOf(), '900');
+            await this.chef.emergencyWithdraw(0, { from: bob });
+            assert.equal((await this.lp.balanceOf(bob)).valueOf(), '1000');
+        });
 
-        // it('在农耕结束后才分发HBT', async () => {
-        //     // 100 per block farming rate starting at block 100 with bonus until block 1000
-        //     this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '100', '1000',this.playerBook.address, { from: alice });
+        it('在农耕结束后才分发HBT', async () => {
+            // 100 per block farming rate starting at block 100 with bonus until block 1000
+            this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '100', '1000',this.playerBook.address, { from: alice });
 
-        //     // await this.hbt.transferOwnership(this.chef.address, { from: alice });
-        //     this.hbt.setAllowMintAddr(this.chef.address,true); //设置铸币白名单
+            // await this.hbt.transferOwnership(this.chef.address, { from: alice });
+            this.hbt.setAllowMintAddr(this.chef.address,true); //设置铸币白名单
 
-        //     await this.chef.add('100', this.lp.address, true);
-        //     await this.lp.approve(this.chef.address, '1000', { from: bob });
-        //     await this.chef.deposit(0, '100', { from: bob });
-        //     await time.advanceBlockTo('89');
-        //     await this.chef.deposit(0, '0', { from: bob }); // block 90
-        //     assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
-        //     await time.advanceBlockTo('94');
-        //     await this.chef.deposit(0, '0', { from: bob }); // block 95
-        //     assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
-        //     await time.advanceBlockTo('99');
-        //     await this.chef.deposit(0, '0', { from: bob }); // block 100
-        //     assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
-        //     await time.advanceBlockTo('100');
-        //     // console.log("pendingHbt",(await this.chef.pendingHbt(0,bob)).valueOf());
-        //     // console.log("balanceOf",(await this.hbt.balanceOf(bob)).valueOf());
-        //     await this.chef.deposit(0, '0', { from: bob }); // block 101
-        //     // assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '100');
-        //     assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'90')
-        //     assert.equal((await this.hbt.balanceOf(minter)).valueOf(), '10');
-        //     await time.advanceBlockTo('104');
-        //     // console.log("pendingHbt",(await this.chef.pendingHbt(0,bob)).valueOf());
-        //     await this.chef.deposit(0, '0', { from: bob }); // block 105
-        //     // assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '500');
-        //     assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'450')
-        //     assert.equal((await this.hbt.balanceOf(minter)).valueOf(), '50');
-        //     await this.chef.extractReward(0, 0, false, { from: bob });
-        //     assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '540');
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '600');
-        //     assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'0')
-        // });
+            await this.chef.add('100', this.lp.address, true);
+            await this.lp.approve(this.chef.address, '1000', { from: bob });
+            await this.chef.deposit(0, '100', { from: bob });
+            await time.advanceBlockTo('89');
+            await this.chef.deposit(0, '0', { from: bob }); // block 90
+            assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
+            await time.advanceBlockTo('94');
+            await this.chef.deposit(0, '0', { from: bob }); // block 95
+            assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
+            await time.advanceBlockTo('99');
+            await this.chef.deposit(0, '0', { from: bob }); // block 100
+            assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
+            await time.advanceBlockTo('100');
+            // console.log("pendingHbt",(await this.chef.pendingHbt(0,bob)).valueOf());
+            // console.log("balanceOf",(await this.hbt.balanceOf(bob)).valueOf());
+            await this.chef.deposit(0, '0', { from: bob }); // block 101
+            // assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '100');
+            assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'90')
+            assert.equal((await this.hbt.balanceOf(minter)).valueOf(), '10');
+            await time.advanceBlockTo('104');
+            // console.log("pendingHbt",(await this.chef.pendingHbt(0,bob)).valueOf());
+            await this.chef.deposit(0, '0', { from: bob }); // block 105
+            // assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '500');
+            assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'450')
+            assert.equal((await this.hbt.balanceOf(minter)).valueOf(), '50');
+            await this.chef.extractReward(0, 0, false, { from: bob });
+            assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '540');
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '600');
+            assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'0')
+        });
 
-        // it('有人赎回、抵押才发HBTToken', async () => {
-        //     // 100 per block farming rate starting at block 200 with bonus until block 1000
-        //     this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '200', '1000',this.playerBook.address, { from: alice });
+        it('有人赎回、抵押才发HBTToken', async () => {
+            // 100 per block farming rate starting at block 200 with bonus until block 1000
+            this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '200', '1000',this.playerBook.address, { from: alice });
 
-        //     this.hbt.setAllowMintAddr(this.chef.address,true); //设置铸币白名单
+            this.hbt.setAllowMintAddr(this.chef.address,true); //设置铸币白名单
 
-        //     await this.chef.add('100', this.lp.address, true);
-        //     await this.lp.approve(this.chef.address, '1000', { from: bob });
-        //     await time.advanceBlockTo('199');
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
-        //     await time.advanceBlockTo('204');
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
-        //     await time.advanceBlockTo('209');
-        //     await this.chef.deposit(0, '10', { from: bob }); // block 210
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
-        //     assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
-        //     // assert.equal((await this.hbt.balanceOf(dev)).valueOf(), '0');
-        //     assert.equal((await this.lp.balanceOf(bob)).valueOf(), '990');
-        //     await time.advanceBlockTo('219');
+            await this.chef.add('100', this.lp.address, true);
+            await this.lp.approve(this.chef.address, '1000', { from: bob });
+            await time.advanceBlockTo('199');
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
+            await time.advanceBlockTo('204');
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
+            await time.advanceBlockTo('209');
+            await this.chef.deposit(0, '10', { from: bob }); // block 210
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
+            assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '0');
+            // assert.equal((await this.hbt.balanceOf(dev)).valueOf(), '0');
+            assert.equal((await this.lp.balanceOf(bob)).valueOf(), '990');
+            await time.advanceBlockTo('219');
 
-        //     await this.chef.withdraw(0, '10', { from: bob }); // block 220
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '1000');
-        //     // assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '900');
+            await this.chef.withdraw(0, '10', { from: bob }); // block 220
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '1000');
+            // assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '900');
 
-        //     // // assert.equal((await this.hbt.balanceOf(dev)).valueOf(), '100');
-        //     // assert.equal((await this.lp.balanceOf(bob)).valueOf(), '1000');
-        //     assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'900')
-        //     assert.equal((await this.hbt.balanceOf(minter)).valueOf(), '100');
-        //     await this.chef.extractReward(0, 0, false, { from: bob });
-        //     // console.log("(await this.hbt.balanceOf(bob)).valueOf()",(await this.hbt.balanceOf(bob)).valueOf().toString(),(await this.hbt.totalSupply()).valueOf().toString())
-        //     assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '900');
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '1000');
-        //     assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'0')
-        // });
+            // // assert.equal((await this.hbt.balanceOf(dev)).valueOf(), '100');
+            // assert.equal((await this.lp.balanceOf(bob)).valueOf(), '1000');
+            assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'900')
+            assert.equal((await this.hbt.balanceOf(minter)).valueOf(), '100');
+            await this.chef.extractReward(0, 0, false, { from: bob });
+            // console.log("(await this.hbt.balanceOf(bob)).valueOf()",(await this.hbt.balanceOf(bob)).valueOf().toString(),(await this.hbt.totalSupply()).valueOf().toString())
+            assert.equal((await this.hbt.balanceOf(bob)).valueOf(), '900');
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '1000');
+            assert.equal((await this.chef.getUserRewardInfo(0,bob)).valueOf(),'0')
+        });
 
-        // it('普通用户先进行赎回本金', async () => {
-        //     // 100 per block farming rate starting at block 200 with bonus until block 1000
-        //     this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '200', '1000',this.playerBook.address, { from: alice });
+        it('普通用户先进行赎回本金', async () => {
+            // 100 per block farming rate starting at block 200 with bonus until block 1000
+            this.chef = await MasterChef.new(this.hbt.address,this.hbtLock.address, '100', '200', '1000',this.playerBook.address, { from: alice });
 
-        //     this.hbt.setAllowMintAddr(this.chef.address,true); //设置铸币白名单
+            this.hbt.setAllowMintAddr(this.chef.address,true); //设置铸币白名单
 
-        //     await this.chef.add('100', this.lp.address, true);
-        //     await this.lp.approve(this.chef.address, '1000', { from: bob });
-        //     await this.lp.approve(this.chef.address, '1000', { from: alice });
-        //     await time.advanceBlockTo('300');
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
-        //     await time.advanceBlockTo('301');
-        //     assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
-        //     await time.advanceBlockTo('302');
-        //     await this.chef.deposit(0, '10', { from: bob }); // block 210
-        //     await this.chef.deposit(0, '10', { from: alice }); // block 210
-        //     await this.chef.withdraw(0, '10', { from: bob }); // block 220
+            await this.chef.add('100', this.lp.address, true);
+            await this.lp.approve(this.chef.address, '1000', { from: bob });
+            await this.lp.approve(this.chef.address, '1000', { from: alice });
+            await time.advanceBlockTo('300');
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
+            await time.advanceBlockTo('301');
+            assert.equal((await this.hbt.totalSupply()).valueOf(), '0');
+            await time.advanceBlockTo('302');
+            await this.chef.deposit(0, '10', { from: bob }); // block 210
+            await this.chef.deposit(0, '10', { from: alice }); // block 210
+            await this.chef.withdraw(0, '10', { from: bob }); // block 220
 
-        // });
+        });
 
         it('为每个投资者发放收益', async () => {
             // 1000 per block farming rate starting at block 300 with bonus until block 1000

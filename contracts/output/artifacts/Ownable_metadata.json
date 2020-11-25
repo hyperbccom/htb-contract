@@ -85,7 +85,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"localhost/MasterChef.sol": "Ownable"
+			"localhost/HBTToken.sol": "Ownable"
 		},
 		"evmVersion": "istanbul",
 		"libraries": {},
@@ -99,11 +99,11 @@
 		"remappings": []
 	},
 	"sources": {
-		"localhost/MasterChef.sol": {
-			"keccak256": "0x7c184a27699e38c621ada34485828d5d27c2a743f20735e285d7b926cb315e71",
+		"localhost/HBTToken.sol": {
+			"keccak256": "0x9bddf76a7d75432dfb9cf3a3a9c011c963068cb0771e3533d25df59842452322",
 			"urls": [
-				"bzz-raw://bfd2640777852eecab22fabccb265db930a612eab77553bb359ea870d38ef22d",
-				"dweb:/ipfs/QmYmvQ2ZBYkPyPGKQ6Bc7X3K3nnqeidumeYSv6BzjpMHMo"
+				"bzz-raw://f4c3c419be031bf1cee73f05475fddce71647aa4920ca2e28310072c9749221f",
+				"dweb:/ipfs/QmRcsHTrjLX9fSKDUfXyYxjcukBnk32zUjcoxvcHojMDR6"
 			]
 		}
 	},
