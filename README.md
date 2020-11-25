@@ -12,6 +12,5 @@
 #### hhc：   0x97cc1e26582763bf31f3434c552dfa7f748816ce        index： 6，1000，18位精度
 #### hdash： 0xc348f56e479d94bc117305df01ca6c2ebdfcc76e        index：7 ，1000，18位精度
 #### hqtum： 0x378052d5d6b316f12f55d4622b7e9cd31ba4cf0a        index：4 ，1000，18位精度
-#### hbt:    0x32fd949e1953b21b7a8232ef4259cd708b4e0847        index:  8  , 1500 , 18位精度
 #### LP:
 #### hbt/usdt:  0x13cf64aacb033bb6a8cecd6d1e9eaf8ab4250022     index:  10 ,  2000 ,  18位精度
